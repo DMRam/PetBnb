@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Image, Text } from 'react-native';
 import { TextInput, Button, Card, Title, useTheme } from 'react-native-paper';
 
-export const LoginScreen = ({  }) => {
+interface Props {
+  logged: () => void
+}
+export const LoginScreen = ({ logged }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const theme = useTheme();
@@ -11,6 +14,7 @@ export const LoginScreen = ({  }) => {
     // Handle login logic
     console.log('Logging in with', email, password);
     // navigation.navigate('Dashboard');
+    logged()
   };
 
   return (
