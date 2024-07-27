@@ -1,40 +1,46 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
-import { Appbar, Card, Title, Paragraph } from 'react-native-paper';
+import { SafeAreaView, View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native';
+import { Card, Title, Paragraph } from 'react-native-paper';
 
-export const DashboardScreenTest = ({ navigation }:any) => {
-
-    const onNavigateBack = () => {
-        navigation.navigate('My')
-    }
+export const DashboardScreenTest = () => {
     return (
-        <View style={styles.container}>
-            <Appbar.Header>
-                {/* <Appbar.Content title="Dashboard" /> */}
-            </Appbar.Header>
-            <ScrollView contentContainerStyle={styles.scrollView}>
-                <Card style={styles.card}>
+        <SafeAreaView style={styles.safeContainer}>
+            <StatusBar barStyle="light-content" backgroundColor="tomato" />
+            <View style={styles.container}>
+                <Text style={styles.text}>Dashboard Screen Test</Text>
+            </View>
+            <ScrollView style={styles.scrollView}>
+                <Card style={styles.card} >
                     <Card.Content>
                         <Title>Test to PetBnb!</Title>
                         <Paragraph>This is your dashboard.</Paragraph>
                     </Card.Content>
                 </Card>
-                
             </ScrollView>
-
-            <TouchableOpacity onPress={onNavigateBack} style={{flex:1, alignItems:'center'}}><Text>GO BACK</Text></TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
+    safeContainer: {
+        flex: 1,
+        backgroundColor: 'tomato',
+    },
     container: {
         flex: 1,
+        backgroundColor: 'tomato',
+    },
+    text: {
+        color: 'white',
+        fontSize: 20,
     },
     scrollView: {
         padding: 16,
     },
     card: {
         marginBottom: 16,
+        // width: '90%',
+        alignItems: 'center',
+        // alignSelf: 'center'
     },
 });
