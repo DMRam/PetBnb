@@ -1,16 +1,56 @@
 import React from 'react';
+import { NavigationContainer, CommonActions } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DashboardScreen } from '../../src/screens/dashboard/DashboardScreen';
 import { DashboardScreenTest } from '../../src/screens/dashboard/DashboardScreenTest';
+import { TestScreen } from '../../src/screens/test/TestScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import { View, TouchableOpacity } from 'react-native';
 
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
-export const BottomNav = () => {
+const HomeDrawer = () => {
+    return (
+        <Drawer.Navigator initialRouteName="Home">
+            <Drawer.Screen name="Home" component={DashboardScreen} />
+            <Drawer.Screen
+                name="TestScreen"
+                component={TestScreen}
+                options={({ navigation }) => ({
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <View style={{ paddingLeft: 20 }}>
+                                <Icon name="arrow-back" size={25} color="#000" />
+                            </View>
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Drawer.Screen
+                name="Settings"
+                component={TestScreen}
+                options={({ navigation }) => ({
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <View style={{ paddingLeft: 20 }}>
+                                <Icon name="arrow-back" size={25} color="#000" />
+                            </View>
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            {/* Add more Drawer Screens here */}
+        </Drawer.Navigator>
+    );
+};
+
+const BottomTabNavigator = () => {
     return (
         <Tab.Navigator
-            screenOptions={({ route }) => ({
+            screenOptions={({ route, navigation }) => ({
+                headerShown: route.name === "Home" ? false : true,
                 headerStyle: {
                     backgroundColor: '#6EC1E4', // Light blue background color
                 },
@@ -24,9 +64,7 @@ export const BottomNav = () => {
                 tabBarActiveTintColor: '#6EC1E4', // Active tab icon color
                 tabBarInactiveTintColor: 'gray', // Inactive tab icon color
                 tabBarIcon: ({ focused, color, size }) => {
-                    let iconName: string = '';
-
-                    console.log(route.name + " <---------------")
+                    let iconName = '';
                     if (route.name === 'Home') {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'Settings') {
@@ -37,36 +75,40 @@ export const BottomNav = () => {
 
                     return <Icon name={iconName} size={size} color={color} />;
                 },
+                headerLeft: (route.name === 'Settings' || route.name === 'Profile') ? () => (
+                    // Helps to get back to the main Home screen
+                    <TouchableOpacity onPress={() => navigation.dispatch(
+                        CommonActions.reset({
+                            index: 0,
+                            routes: [{ name: 'Home' }],
+                        })
+                    )}>
+                        <View style={{ paddingLeft: 20 }}>
+                            <Icon name="arrow-back" size={25} color="#fff" />
+                        </View>
+                    </TouchableOpacity>
+                ) : undefined,
             })}
         >
             <Tab.Screen
                 name="Home"
-                component={DashboardScreen}
+                component={HomeDrawer}
                 options={{
                     tabBarLabel: 'Home',
-                    // tabBarIcon: ({ color, size }) => (
-                    //     <AntDesign name="home" size={size} color={color} />
-                    // ),
                 }}
             />
             <Tab.Screen
                 name="Settings"
-                component={DashboardScreen}
+                component={DashboardScreen} // Replace with actual SettingsScreen
                 options={{
                     tabBarLabel: 'Settings',
-                    // tabBarIcon: ({ color, size }) => (
-                    //     <Icon name="stepbackward" color={color} size={size} />
-                    // ),
                 }}
             />
             <Tab.Screen
                 name="Profile"
-                component={DashboardScreen}
+                component={DashboardScreen} // Replace with actual ProfileScreen
                 options={{
                     tabBarLabel: 'Profile',
-                    // tabBarIcon: ({ color, size }) => (
-                    //     <Icon name="stepbackward" color={color} size={size} />
-                    // ),
                 }}
             />
             <Tab.Screen
@@ -77,5 +119,18 @@ export const BottomNav = () => {
                 }}
             />
         </Tab.Navigator>
+    );
+};
+
+const RootNavigator = () => {
+    return (
+
+        <BottomTabNavigator />
+    );
+};
+
+export const AppNavigator = () => {
+    return (
+        <RootNavigator />
     );
 };

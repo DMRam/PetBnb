@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
-import { SafeAreaView, Text } from 'react-native'
-import { TestScreen } from './screens/test/TestScreen';
 import { LoginScreen } from './screens/credentials/LoginScreen';
-import { DashboardScreen } from './screens/dashboard/DashboardScreen';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Navigator } from './navigator/Navigator';
-import { BottomNav } from './navigator/BottomNav';
+import { AppNavigator } from './navigator/BottomNav';
+import { DrawerNav } from './navigator/DrawerNav';
+
 
 
 export const App = () => {
@@ -28,19 +25,16 @@ export const App = () => {
   }
 
   return (
-    <NavigationContainer>
-      <PaperProvider theme={theme}>
-        {!logged && <LoginScreen logged={onLoginClicked} />}
-        {logged &&
-          // <Navigator />
-          <BottomNav />
-        }
-        {/* <TestScreen /> */}
-
-        {/* <DashboardScreen /> */}
-
-        
-      </PaperProvider>
-    </NavigationContainer>
+      <NavigationContainer>
+        <PaperProvider theme={theme}>
+          {!logged && <LoginScreen logged={onLoginClicked} />}
+          {logged &&
+            // <Navigator />
+            // <BottomNav />
+            // <DrawerNav />
+            <AppNavigator />
+          }
+        </PaperProvider>
+      </NavigationContainer>
   )
 }
