@@ -1,51 +1,81 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { StatusBar, View, StyleSheet, ScrollView, TouchableOpacity, Text, SafeAreaView } from 'react-native';
 import { Appbar, Card, Title, Paragraph } from 'react-native-paper';
 
-export const DashboardScreen = ({ navigation }:any) => {
+export const DashboardScreen = ({ navigation }: any) => {
 
     const onNavigateBack = () => {
         navigation.navigate('MyTest')
     }
+
+    const onSearchHost = () => {
+        navigation.navigate('SearchHome')
+    }
+    const onSearchProduct = () => {
+
+    }
+    const onSearchServices = () => {
+
+    }
+
     return (
-        <View style={styles.container}>
-            <Appbar.Header>
-                {/* <Appbar.Content title="Dashboard" /> */}
-            </Appbar.Header>
-            <ScrollView contentContainerStyle={styles.scrollView}>
-                <Card style={styles.card}>
+        <SafeAreaView style={styles.safeContainer}>
+            <StatusBar barStyle="light-content" backgroundColor="tomato" />
+            <View style={styles.container}>
+                {/* <Text style={styles.text}>Dashboard Screen Test</Text> */}
+            </View>
+            <ScrollView style={styles.scrollView}>
+                <TouchableOpacity onPress={onSearchHost}>
+                    <Card style={styles.card} >
+                        <Card.Content>
+                            <Title>Search Host!</Title>
+                            <Paragraph>This is your dashboard.</Paragraph>
+                        </Card.Content>
+                    </Card>
+                </TouchableOpacity>
+                <Card style={styles.card} >
                     <Card.Content>
-                        <Title>Welcome to PetBnb!</Title>
+                        <Title>Search Product!</Title>
                         <Paragraph>This is your dashboard.</Paragraph>
                     </Card.Content>
                 </Card>
-                <Card style={styles.card}>
+                <Card style={styles.card} >
                     <Card.Content>
-                        <Title>Your Pets</Title>
-                        <Paragraph>Manage your pets here.</Paragraph>
-                    </Card.Content>
-                </Card>
-                <Card style={styles.card}>
-                    <Card.Content>
-                        <Title>Bookings</Title>
-                        <Paragraph>View and manage your bookings.</Paragraph>
+                        <Title>Search Services!</Title>
+                        <Paragraph>This is your dashboard.</Paragraph>
                     </Card.Content>
                 </Card>
             </ScrollView>
-
-            <TouchableOpacity onPress={onNavigateBack} style={{flex:1, alignItems:'center'}}><Text>GO BACK</Text></TouchableOpacity>
-        </View>
+            {/* <TouchableOpacity onPress={onNavigateBack} style={{ flex: 1, alignItems: 'center' }}><Text>GO BACK</Text></TouchableOpacity> */}
+        </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
+    safeContainer: {
+        flex: 1,
+        backgroundColor: 'tomato',
+    },
     container: {
         flex: 1,
+        backgroundColor: 'tomato',
+    },
+    text: {
+        color: 'white',
+        fontSize: 20,
     },
     scrollView: {
         padding: 16,
     },
     card: {
         marginBottom: 16,
+        // width: '90%',
+        alignItems: 'center',
+        // alignSelf: 'center'
     },
 });
+
+
+
+
+//             

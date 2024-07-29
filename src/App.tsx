@@ -3,13 +3,10 @@ import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper
 import { LoginScreen } from './screens/credentials/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppNavigator } from './navigator/BottomNav';
-import { DrawerNav } from './navigator/DrawerNav';
-
+import { useLogged } from './hooks/logged_state/useLogged';
 
 
 export const App = () => {
-
-  const [logged, setLogged] = useState<boolean>(false)
 
   const theme = {
     ...DefaultTheme,
@@ -20,21 +17,23 @@ export const App = () => {
     },
   };
 
+
+  const { logged, onLoggedInOut } = useLogged()
   const onLoginClicked = () => {
-    setLogged(!logged)
+    onLoggedInOut()
   }
 
   return (
-      <NavigationContainer>
-        <PaperProvider theme={theme}>
-          {!logged && <LoginScreen logged={onLoginClicked} />}
-          {logged &&
-            // <Navigator />
-            // <BottomNav />
-            // <DrawerNav />
-            <AppNavigator />
-          }
-        </PaperProvider>
-      </NavigationContainer>
+    <NavigationContainer>
+      <PaperProvider theme={theme}>
+        {!logged && <LoginScreen logged={onLoginClicked} />}
+        {logged &&
+          // <Navigator />
+          // <BottomNav />
+          // <DrawerNav />
+          <AppNavigator />
+        }
+      </PaperProvider>
+    </NavigationContainer>
   )
 }

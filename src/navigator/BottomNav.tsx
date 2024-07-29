@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer, CommonActions } from '@react-navigation/native';
+import { CommonActions } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DashboardScreen } from '../../src/screens/dashboard/DashboardScreen';
@@ -7,16 +7,67 @@ import { DashboardScreenTest } from '../../src/screens/dashboard/DashboardScreen
 import { TestScreen } from '../../src/screens/test/TestScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, TouchableOpacity } from 'react-native';
+import { SearchHome } from '../screens/owner/SearchHome';
+import { useLogged } from '../../src/hooks/logged_state/useLogged';
+import { LogoutButton } from '../../src/components/buttons/LogoutButton';
+import { CustomDrawerContent } from '../../src/components/drawer/CustomDrawerComponent';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-const HomeDrawer = () => {
+interface Props {
+    onLoggedOut: () => void
+}
+
+const DrawerHome = () => {
+    const { onLoggedInOut } = useLogged();
+    const loggedOut = () => {
+        onLoggedInOut();
+    };
     return (
-        <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} />}>
             <Drawer.Screen name="Home" component={DashboardScreen} />
             <Drawer.Screen
-                name="TestScreen"
+                name="Pet Profile"
+                component={TestScreen}
+                options={({ navigation }) => ({
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <View style={{ paddingLeft: 20 }}>
+                                <Icon name="arrow-back" size={25} color="#000" />
+                            </View>
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Drawer.Screen
+                name="Owner Profile"
+                component={TestScreen}
+                options={({ navigation }) => ({
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <View style={{ paddingLeft: 20 }}>
+                                <Icon name="arrow-back" size={25} color="#000" />
+                            </View>
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Drawer.Screen
+                name="Host Profile"
+                component={TestScreen}
+                options={({ navigation }) => ({
+                    headerLeft: () => (
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <View style={{ paddingLeft: 20 }}>
+                                <Icon name="arrow-back" size={25} color="#000" />
+                            </View>
+                        </TouchableOpacity>
+                    ),
+                })}
+            />
+            <Drawer.Screen
+                name="Seller Profile"
                 component={TestScreen}
                 options={({ navigation }) => ({
                     headerLeft: () => (
@@ -41,16 +92,24 @@ const HomeDrawer = () => {
                     ),
                 })}
             />
-            {/* Add more Drawer Screens here */}
+            {/* <Drawer.Screen
+                name="Logout"
+                component={LogoutButton}
+                options={{
+                    drawerLabel: 'Logout',
+                }}
+            /> */}
         </Drawer.Navigator>
     );
 };
+
+
 
 const BottomTabNavigator = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route, navigation }) => ({
-                headerShown: route.name === "Home" ? false : true,
+                headerShown: route.name === "Main" ? false : true,
                 headerStyle: {
                     backgroundColor: '#6EC1E4', // Light blue background color
                 },
@@ -65,22 +124,22 @@ const BottomTabNavigator = () => {
                 tabBarInactiveTintColor: 'gray', // Inactive tab icon color
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName = '';
-                    if (route.name === 'Home') {
+                    if (route.name === 'Main') {
                         iconName = focused ? 'home' : 'home-outline';
-                    } else if (route.name === 'Settings') {
+                    } else if (route.name === 'SettingsTab') {
                         iconName = focused ? 'settings' : 'settings-outline';
-                    } else if (route.name === 'Profile') {
-                        iconName = focused ? 'person' : 'person-outline';
+                    } else if (route.name === 'SearchTab') {
+                        iconName = focused ? 'search-outline' : 'search-outline';
                     }
 
                     return <Icon name={iconName} size={size} color={color} />;
                 },
-                headerLeft: (route.name === 'Settings' || route.name === 'Profile') ? () => (
+                headerLeft: (route.name === 'SettingsTab' || route.name === 'ProfileTab' || route.name === 'SearchHomeTab' || route.name === 'SearchTab') ? () => (
                     // Helps to get back to the main Home screen
                     <TouchableOpacity onPress={() => navigation.dispatch(
                         CommonActions.reset({
                             index: 0,
-                            routes: [{ name: 'Home' }],
+                            routes: [{ name: 'Main' }],
                         })
                     )}>
                         <View style={{ paddingLeft: 20 }}>
@@ -91,29 +150,36 @@ const BottomTabNavigator = () => {
             })}
         >
             <Tab.Screen
-                name="Home"
-                component={HomeDrawer}
+                name="Main"
+                component={DrawerHome}
                 options={{
                     tabBarLabel: 'Home',
                 }}
             />
             <Tab.Screen
-                name="Settings"
-                component={DashboardScreen} // Replace with actual SettingsScreen
+                name="SearchTab"
+                component={SearchHome}
+                options={{
+                    tabBarLabel: 'Search',
+                }}
+            />
+            <Tab.Screen
+                name="SettingsTab"
+                component={SearchHome}
                 options={{
                     tabBarLabel: 'Settings',
                 }}
             />
             <Tab.Screen
-                name="Profile"
-                component={DashboardScreen} // Replace with actual ProfileScreen
+                name="MyTestTab"
+                component={DashboardScreenTest}
                 options={{
-                    tabBarLabel: 'Profile',
+                    tabBarButton: () => null,
                 }}
             />
             <Tab.Screen
-                name="MyTest"
-                component={DashboardScreenTest}
+                name="SearchHomeTab"
+                component={SearchHome}
                 options={{
                     tabBarButton: () => null,
                 }}
@@ -124,7 +190,6 @@ const BottomTabNavigator = () => {
 
 const RootNavigator = () => {
     return (
-
         <BottomTabNavigator />
     );
 };
