@@ -13,105 +13,45 @@ import { CustomDrawerContent } from '../../src/components/drawer/CustomDrawerCom
 import { SearchHome } from '../../src/screens/owner/SearchHome';
 import { SearchHostStepI } from '../../src/screens/owner/SearchHostStepI';
 import { SearchHostStepII } from '../../src/screens/owner/SearchHostStepII';
+import { SummaryScreen } from '../../src/screens/owner/SearchHostStepIII';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-interface Props {
-    onLoggedOut: () => void
-}
-
-const DrawerHome = () => {
+const DrawerHome = ({ navigation }: any) => {
     const { onLoggedInOut } = useLogged();
     const loggedOut = () => {
         onLoggedInOut();
     };
+
     return (
         <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} />}>
             <Drawer.Screen name="Home" component={DashboardScreen} />
-            <Drawer.Screen
-                name="Pet Profile"
-                component={TestScreen}
-                options={({ navigation }) => ({
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <View style={{ paddingLeft: 20 }}>
-                                <Icon name="arrow-back" size={25} color="#000" />
-                            </View>
-                        </TouchableOpacity>
-                    ),
-                })}
-            />
-            <Drawer.Screen
-                name="Owner Profile"
-                component={TestScreen}
-                options={({ navigation }) => ({
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <View style={{ paddingLeft: 20 }}>
-                                <Icon name="arrow-back" size={25} color="#000" />
-                            </View>
-                        </TouchableOpacity>
-                    ),
-                })}
-            />
-            <Drawer.Screen
-                name="Host Profile"
-                component={TestScreen}
-                options={({ navigation }) => ({
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <View style={{ paddingLeft: 20 }}>
-                                <Icon name="arrow-back" size={25} color="#000" />
-                            </View>
-                        </TouchableOpacity>
-                    ),
-                })}
-            />
-            <Drawer.Screen
-                name="Seller Profile"
-                component={TestScreen}
-                options={({ navigation }) => ({
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <View style={{ paddingLeft: 20 }}>
-                                <Icon name="arrow-back" size={25} color="#000" />
-                            </View>
-                        </TouchableOpacity>
-                    ),
-                })}
-            />
-            <Drawer.Screen
-                name="Settings"
-                component={TestScreen}
-                options={({ navigation }) => ({
-                    headerLeft: () => (
-                        <TouchableOpacity onPress={() => navigation.goBack()}>
-                            <View style={{ paddingLeft: 20 }}>
-                                <Icon name="arrow-back" size={25} color="#000" />
-                            </View>
-                        </TouchableOpacity>
-                    ),
-                })}
-            />
-            {/* <Drawer.Screen
-                name="Logout"
-                component={LogoutButton}
-                options={{
-                    drawerLabel: 'Logout',
-                }}
-            /> */}
+            {['Pet Profile', 'Owner Profile', 'Host Profile', 'Seller Profile', 'Settings'].map(screen => (
+                <Drawer.Screen
+                    key={screen}
+                    name={screen}
+                    component={TestScreen}
+                    options={{
+                        headerLeft: () => (
+                            <TouchableOpacity onPress={() => navigation.goBack()}>
+                                <View style={{ paddingLeft: 20 }}>
+                                    <Icon name="arrow-back" size={25} color="#000" />
+                                </View>
+                            </TouchableOpacity>
+                        ),
+                    }}
+                />
+            ))}
         </Drawer.Navigator>
     );
 };
-
-
 
 const BottomTabNavigator = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route, navigation }) => ({
-                headerShown: route.name === "Main" ? false : true,
+                headerShown: route.name !== 'Main',
                 headerStyle: {
                     backgroundColor: '#6EC1E4', // Light blue background color
                 },
@@ -136,25 +76,40 @@ const BottomTabNavigator = () => {
 
                     return <Icon name={iconName} size={size} color={color} />;
                 },
-                // Any new Screen need to be added here in order to get the back arrow to the main screen
-                // In case of go back it would be needed to override this method for the specific screen
-                headerLeft: (
-                    route.name === 'SettingsTab' ||
-                    route.name === 'ProfileTab' ||
-                    route.name === 'Search Host Step I' ||
-                    route.name === 'SearchTab') ? () => (
-                        // Helps to get back to the main Home screen
-                        <TouchableOpacity onPress={() => navigation.dispatch(
-                            CommonActions.reset({
-                                index: 0,
-                                routes: [{ name: 'Main' }],
-                            })
-                        )}>
-                            <View style={{ paddingLeft: 20 }}>
-                                <Icon name="arrow-back" size={25} color="#fff" />
-                            </View>
-                        </TouchableOpacity>
-                    ) : undefined,
+                headerLeft: () => {
+                    console.log(route.name + " <---------")
+                    if (route.name === 'Search Host Step II') {
+                        return (
+                            <TouchableOpacity onPress={() => navigation.navigate('Search Host Step I')}>
+                                <View style={{ paddingLeft: 20 }}>
+                                    <Icon name="arrow-back" size={25} color="#fff" />
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    } else if (['SettingsTab', 'ProfileTab', 'Search Host Step I', 'SearchTab'].includes(route.name)) {
+                        return (
+                            <TouchableOpacity onPress={() => navigation.dispatch(
+                                CommonActions.reset({
+                                    index: 0,
+                                    routes: [{ name: 'Main' }],
+                                })
+                            )}>
+                                <View style={{ paddingLeft: 20 }}>
+                                    <Icon name="arrow-back" size={25} color="#fff" />
+                                </View>
+                            </TouchableOpacity>
+                        );
+
+                    } else if (route.name === 'Summary') {
+                        return (
+                            <TouchableOpacity onPress={() => navigation.navigate('Search Host Step II')}>
+                                <View style={{ paddingLeft: 20 }}>
+                                    <Icon name="arrow-back" size={25} color="#fff" />
+                                </View>
+                            </TouchableOpacity>)
+                    }
+                    return undefined;
+                },
             })}
         >
             <Tab.Screen
@@ -189,21 +144,28 @@ const BottomTabNavigator = () => {
                 name="SearchHome"
                 component={SearchHome}
                 options={{
-                    tabBarButton: () => null, // Hide this tab but making accesible 
+                    tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
             />
             <Tab.Screen
                 name="Search Host Step I"
                 component={SearchHostStepI}
                 options={{
-                    tabBarButton: () => null, // Hide this tab but making accesible 
+                    tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
             />
             <Tab.Screen
                 name="Search Host Step II"
                 component={SearchHostStepII}
                 options={{
-                    tabBarButton: () => null, // Hide this tab but making accesible 
+                    tabBarButton: () => null, // Hide this tab but making it accessible 
+                }}
+            />
+            <Tab.Screen
+                name="Summary"
+                component={SummaryScreen}
+                options={{
+                    tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
             />
         </Tab.Navigator>

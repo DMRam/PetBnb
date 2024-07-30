@@ -39,7 +39,7 @@ export const SearchHome = ({ navigation }: any) => {
     console.log('Confirmed Behavior:', behaviorValue);
 
     // Navigate to another screen or perform desired action
-    navigation.navigate('NextScreen', {
+    navigation.navigate('Search Host Step I', {
       petType: petValue,
       age: ageValue,
       behavior: behaviorValue,
