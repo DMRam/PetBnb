@@ -3,7 +3,7 @@ import { StatusBar, View, StyleSheet, ScrollView, SafeAreaView, ImageBackground,
 import RNPickerSelect from 'react-native-picker-select';
 import { Card, Title, Paragraph } from 'react-native-paper';
 
-export const SearchHome = ({ navigation }: any) => {
+export const SearchHostStepI = ({ navigation }: any) => {
   const [petValue, setPetValue] = useState<string | null>(null);
   const [ageValue, setAgeValue] = useState<string | null>(null);
   const [behaviorValue, setBehaviorValue] = useState<string | null>(null);
@@ -34,12 +34,13 @@ export const SearchHome = ({ navigation }: any) => {
 
   const handleConfirmSelection = () => {
     // You can perform further actions or navigation here
+
     console.log('Confirmed Pet Type:', petValue);
     console.log('Confirmed Age:', ageValue);
     console.log('Confirmed Behavior:', behaviorValue);
 
     // Navigate to another screen or perform desired action
-    navigation.navigate('NextScreen', {
+    navigation.navigate('Search Host Step II', {
       petType: petValue,
       age: ageValue,
       behavior: behaviorValue,
