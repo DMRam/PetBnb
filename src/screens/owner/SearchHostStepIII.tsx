@@ -19,7 +19,7 @@ export const SummaryScreen = ({ navigation, route }: any) => {
   const totalDays = calculateDaysBetweenDates(start, end);
 
   const handleSearch = () => {
-    navigation.navigate('MapScreen', {
+    navigation.navigate('Map Results', {
       ...route.params,
     });
   };

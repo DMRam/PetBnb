@@ -15,6 +15,10 @@ if linkage != nil
 end
 
 target 'PetBnb' do
+  # React Native Maps dependencies
+  rn_maps_path = '../node_modules/react-native-maps' # Added as per documentation
+  pod 'react-native-google-maps', :path => rn_maps_path # Added as per documentation
+
   config = use_native_modules!
 
   use_react_native!(

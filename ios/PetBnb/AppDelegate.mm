@@ -1,3 +1,4 @@
+#import <GoogleMaps/GoogleMaps.h>
 #import "AppDelegate.h"
 
 #import <React/RCTBundleURLProvider.h>
@@ -6,6 +7,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [GMSServices provideAPIKey:@"AIzaSyCkUwyKfLEfEyIHx0u1cSlkFe5nY6lNj_4"]; // Line added as per Documentation
   self.moduleName = @"PetBnb";
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.

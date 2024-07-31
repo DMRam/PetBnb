@@ -14,6 +14,9 @@ import { SearchHome } from '../../src/screens/owner/SearchHome';
 import { SearchHostStepI } from '../../src/screens/owner/SearchHostStepI';
 import { SearchHostStepII } from '../../src/screens/owner/SearchHostStepII';
 import { SummaryScreen } from '../../src/screens/owner/SearchHostStepIII';
+import { MapResult } from '../../src/screens/map/MapResult';
+import { Settings } from '../../src/screens/app/Settings';
+import { HostHome } from '../../src/screens/host/HostHome';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -70,8 +73,8 @@ const BottomTabNavigator = () => {
                         iconName = focused ? 'home' : 'home-outline';
                     } else if (route.name === 'SettingsTab') {
                         iconName = focused ? 'settings' : 'settings-outline';
-                    } else if (route.name === 'SearchTab') {
-                        iconName = focused ? 'search-outline' : 'search-outline';
+                    } else if (route.name === 'Host Home') {
+                        iconName = focused ? 'swap-horizontal-outline' : 'swap-horizontal-outline';
                     }
 
                     return <Icon name={iconName} size={size} color={color} />;
@@ -86,7 +89,7 @@ const BottomTabNavigator = () => {
                                 </View>
                             </TouchableOpacity>
                         );
-                    } else if (['SettingsTab', 'ProfileTab', 'Search Host Step I', 'SearchTab'].includes(route.name)) {
+                    } else if (['SettingsTab', 'ProfileTab', 'Search Host Step I', 'Host Home', 'Map Results'].includes(route.name)) {
                         return (
                             <TouchableOpacity onPress={() => navigation.dispatch(
                                 CommonActions.reset({
@@ -119,16 +122,19 @@ const BottomTabNavigator = () => {
                     tabBarLabel: 'Home',
                 }}
             />
+            {/* TODO */}
+            {/* This tab needs to handle the global state, like Host/Owner */}
+            {/* Additionally i will need an Vet login/Session/Role */}
             <Tab.Screen
-                name="SearchTab"
-                component={SearchHome}
+                name="Host Home"
+                component={HostHome}
                 options={{
-                    tabBarLabel: 'Search',
+                    tabBarLabel: 'Switch to Host',
                 }}
             />
             <Tab.Screen
                 name="SettingsTab"
-                component={SearchHome}
+                component={Settings}
                 options={{
                     tabBarLabel: 'Settings',
                 }}
@@ -164,6 +170,13 @@ const BottomTabNavigator = () => {
             <Tab.Screen
                 name="Summary"
                 component={SummaryScreen}
+                options={{
+                    tabBarButton: () => null, // Hide this tab but making it accessible 
+                }}
+            />
+            <Tab.Screen
+                name="Map Results"
+                component={MapResult}
                 options={{
                     tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
