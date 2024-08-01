@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar, View, StyleSheet, ScrollView, TouchableOpacity, Text, SafeAreaView, ImageBackground } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
 
-export const DashboardScreen = ({ navigation }: any) => {
+export const DashboardScreenOwner = ({ navigation }: any) => {
 
     const onSearchHost = () => {
         navigation.navigate('Search Host Step I');

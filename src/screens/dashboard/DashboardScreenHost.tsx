@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView, View, Text, StyleSheet, StatusBar, ScrollView } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
 
-export const DashboardScreenTest = () => {
+export const DashboardScreenHost = () => {
     return (
         <SafeAreaView style={styles.safeContainer}>
             <StatusBar barStyle="light-content" backgroundColor="tomato" />

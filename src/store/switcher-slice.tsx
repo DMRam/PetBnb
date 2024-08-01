@@ -34,6 +34,7 @@ const flagForUpdates: boolean = false
 // const isSummaryConfirmed: boolean = false
 
 const userLogged = false
+const loggedUserRole = ''
 
 const initialState = {
     isVisible: true,
@@ -49,7 +50,8 @@ const initialState = {
     formStepI,
     formStepII,
     formStepIII,
-    flagForUpdates
+    flagForUpdates,
+    loggedUserRole
 };
 
 const sliceMenu = createSlice({
@@ -59,8 +61,12 @@ const sliceMenu = createSlice({
         hideUsersPictureWhenDrawerIsOpen(state) {
             state.isVisible = !state.isVisible;
         },
+        
         sliceAddUserLogged(state) {
             state.userLogged = !state.userLogged
+        },
+        sliceLoggedUserRole(state, action) {
+            state.loggedUserRole = action.payload
         },
         toggleMetaDataBooleanLogin(state) {
             state.metaDataLoginTrigger = !state.metaDataLoginTrigger
@@ -108,7 +114,7 @@ const sliceMenu = createSlice({
     },
 });
 
-export const { sliceFlagForUpdates, sliceToggleStepI, sliceToggleStepII, sliceToggleStepIII, sliceToggleGoSummary, itIsSummaryScreen, sliceIsSummaryConfirmed, sliceIsToggleGoNextStepLeague, sliceIsToggleCalled, headerNameSwitcher, hideUsersPictureWhenDrawerIsOpen, sliceAddUserLogged, toggleMetaDataBooleanLogin, toggleMetaDataBooleanSignUp } =
+export const { sliceLoggedUserRole, sliceFlagForUpdates, sliceToggleStepI, sliceToggleStepII, sliceToggleStepIII, sliceToggleGoSummary, itIsSummaryScreen, sliceIsSummaryConfirmed, sliceIsToggleGoNextStepLeague, sliceIsToggleCalled, headerNameSwitcher, hideUsersPictureWhenDrawerIsOpen, sliceAddUserLogged, toggleMetaDataBooleanLogin, toggleMetaDataBooleanSignUp } =
     sliceMenu.actions;
 export const selectUI = (state: RootState) => state.ui;
 

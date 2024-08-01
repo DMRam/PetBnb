@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import { LoginScreen } from './screens/credentials/LoginScreen';
 import { NavigationContainer } from '@react-navigation/native';
-import { AppNavigator } from './navigator/BottomNav';
+import { AppNavigatorOwner } from './navigator/AppNavigatorOwner';
 import { useLogged } from './hooks/logged_state/useLogged';
+import { useLoggedUserRole } from './hooks/logged_state/useLoggedUserRole';
+import { AppNavigatorHost } from './navigator/AppNavigatorHost';
 
 
 export const App = () => {
@@ -19,20 +21,27 @@ export const App = () => {
 
 
   const { logged, onLoggedInOut } = useLogged()
+  const { roleLogged, onLoggedUserRole } = useLoggedUserRole()
+
   const onLoginClicked = () => {
     onLoggedInOut()
+
+    // Additionally needs to give a role logged by default is Owner
+    onLoggedUserRole("Owner")
   }
 
+
+
+  console.log("APP.tsx ROLE: " + roleLogged)
   return (
     <NavigationContainer>
       <PaperProvider theme={theme}>
-        {!logged && <LoginScreen logged={onLoginClicked} />}
-        {logged &&
-          // <Navigator />
-          // <BottomNav />
-          // <DrawerNav />
-          <AppNavigator />
-        }
+
+        {!logged ? (
+          <LoginScreen logged={onLoginClicked} />
+        ) : (
+          roleLogged === 'Owner' ? <AppNavigatorOwner /> : <AppNavigatorHost />
+        )}
       </PaperProvider>
     </NavigationContainer>
   )

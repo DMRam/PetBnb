@@ -2,39 +2,54 @@ import React from 'react';
 import { CommonActions } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { DashboardScreen } from '../../src/screens/dashboard/DashboardScreen';
-import { DashboardScreenTest } from '../../src/screens/dashboard/DashboardScreenTest';
-import { TestScreen } from '../../src/screens/test/TestScreen';
+import { DashboardScreenHost } from '../screens/dashboard/DashboardScreenHost';
+import { TestScreen } from '../screens/test/TestScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, TouchableOpacity } from 'react-native';
-import { useLogged } from '../../src/hooks/logged_state/useLogged';
-import { LogoutButton } from '../../src/components/buttons/LogoutButton';
-import { CustomDrawerContent } from '../../src/components/drawer/CustomDrawerComponent';
-import { SearchHome } from '../../src/screens/owner/SearchHome';
-import { SearchHostStepI } from '../../src/screens/owner/SearchHostStepI';
-import { SearchHostStepII } from '../../src/screens/owner/SearchHostStepII';
-import { SummaryScreen } from '../../src/screens/owner/SearchHostStepIII';
-import { MapResult } from '../../src/screens/map/MapResult';
-import { Settings } from '../../src/screens/app/Settings';
-import { HostHome } from '../../src/screens/host/HostHome';
+import { useLogged } from '../hooks/logged_state/useLogged';
+import { LogoutButton } from '../components/buttons/LogoutButton';
+import { CustomDrawerContent } from '../components/drawer/CustomDrawerComponent';
+import { SearchHome } from '../screens/owner/SearchHome';
+import { SearchHostStepI } from '../screens/owner/SearchHostStepI';
+import { SearchHostStepII } from '../screens/owner/SearchHostStepII';
+import { SummaryScreen } from '../screens/owner/SearchHostStepIII';
+import { MapResult } from '../screens/map/MapResult';
+import { Settings } from '../screens/app/Settings';
+import { useLoggedUserRole } from '../../src/hooks/logged_state/useLoggedUserRole';
+import { SellerScreen } from '../../src/screens/seller/SellerScreen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
-const DrawerHome = ({ navigation }: any) => {
+const DrawerHomeHost = ({ navigation }: any) => {
     const { onLoggedInOut } = useLogged();
     const loggedOut = () => {
         onLoggedInOut();
     };
 
+    // This is handling the Screens to display base 
+    // on the elements clicked and its names
+    const getScreenComponent = (screenName: string) => {
+        switch (screenName) {
+            case 'Seller Profile':
+                return SellerScreen;
+            case 'Host Profile':
+            case 'My Hosted':
+            case 'Settings':
+                return TestScreen; // Replace with the actual components for these screens
+            default:
+                return TestScreen; // Default component if none match
+        }
+    };
+
     return (
         <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} />}>
-            <Drawer.Screen name="Home" component={DashboardScreen} />
-            {['Pet Profile', 'Owner Profile', 'Host Profile', 'Seller Profile', 'Settings'].map(screen => (
+            <Drawer.Screen name="Host Home" component={DashboardScreenHost} />
+            {['Host Profile', 'Seller Profile', 'My Hosted', 'Settings'].map(screen => (
                 <Drawer.Screen
                     key={screen}
                     name={screen}
-                    component={TestScreen}
+                    component={getScreenComponent(screen)}
                     options={{
                         headerLeft: () => (
                             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -50,7 +65,12 @@ const DrawerHome = ({ navigation }: any) => {
     );
 };
 
-const BottomTabNavigator = () => {
+const BottomTabNavigatorHost = () => {
+
+    const { onLoggedUserRole } = useLoggedUserRole()
+    const switchToOwner = () => {
+        onLoggedUserRole('Owner')
+    }
     return (
         <Tab.Navigator
             screenOptions={({ route, navigation }) => ({
@@ -117,7 +137,7 @@ const BottomTabNavigator = () => {
         >
             <Tab.Screen
                 name="Main"
-                component={DrawerHome} // Displaying the Drawer within the bottom tabs
+                component={DrawerHomeHost} // Displaying the Drawer within the bottom tabs
                 options={{
                     tabBarLabel: 'Home',
                 }}
@@ -127,10 +147,16 @@ const BottomTabNavigator = () => {
             {/* Additionally i will need an Vet login/Session/Role */}
             <Tab.Screen
                 name="Host Home"
-                component={HostHome}
+                component={DashboardScreenHost}
                 options={{
-                    tabBarLabel: 'Switch to Host',
+                    tabBarLabel: 'Switch to Owner',
                 }}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                        switchToOwner();
+                        e.preventDefault();
+                    },
+                })}
             />
             <Tab.Screen
                 name="SettingsTab"
@@ -140,35 +166,35 @@ const BottomTabNavigator = () => {
                 }}
             />
             <Tab.Screen
-                name="MyTestTab"
-                component={DashboardScreenTest}
+                name="Coming Guest"
+                component={DashboardScreenHost}
                 options={{
                     tabBarButton: () => null, // Hide this tab
                 }}
             />
             <Tab.Screen
-                name="SearchHome"
+                name="Incomes"
                 component={SearchHome}
                 options={{
                     tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
             />
             <Tab.Screen
-                name="Search Host Step I"
+                name="My Products"
                 component={SearchHostStepI}
                 options={{
                     tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
             />
             <Tab.Screen
-                name="Search Host Step II"
+                name="My Services"
                 component={SearchHostStepII}
                 options={{
                     tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
             />
             <Tab.Screen
-                name="Summary"
+                name="Messages"
                 component={SummaryScreen}
                 options={{
                     tabBarButton: () => null, // Hide this tab but making it accessible 
@@ -185,14 +211,14 @@ const BottomTabNavigator = () => {
     );
 };
 
-const RootNavigator = () => {
+const RootNavigatorHost = () => {
     return (
-        <BottomTabNavigator />
+        <BottomTabNavigatorHost />
     );
 };
 
-export const AppNavigator = () => {
+export const AppNavigatorHost = () => {
     return (
-        <RootNavigator />
+        <RootNavigatorHost />
     );
 };
