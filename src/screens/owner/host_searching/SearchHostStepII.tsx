@@ -5,7 +5,7 @@ import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/dat
 export const SearchHostStepII = ({ navigation, route }: any) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [comments, setComments] = useState<string>('');
+  // const [comments, setComments] = useState<string>('');
   const [showStartDatePicker, setShowStartDatePicker] = useState<boolean>(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState<boolean>(false);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
@@ -25,13 +25,13 @@ export const SearchHostStepII = ({ navigation, route }: any) => {
   const handleConfirmSelection = () => {
     console.log('Confirmed Start Date:', startDate);
     console.log('Confirmed End Date:', endDate);
-    console.log('Additional Comments:', comments);
+    // console.log('Additional Comments:', comments);
 
     navigation.navigate('Summary', {
       ...route.params,
       startDate,
       endDate,
-      comments,
+      // comments,
     });
   };
 
@@ -40,13 +40,18 @@ export const SearchHostStepII = ({ navigation, route }: any) => {
       <Text style={styles.confirmationText}>Confirm your selections:</Text>
       <Text style={styles.confirmationDetail}>Start Date: {startDate?.toDateString()}</Text>
       <Text style={styles.confirmationDetail}>End Date: {endDate?.toDateString()}</Text>
-      <Text style={styles.confirmationDetail}>Comments: {comments}</Text>
+      {/* <Text style={styles.confirmationDetail}>Comments: {comments}</Text> */}
       <TouchableOpacity onPress={handleConfirmSelection} style={styles.buttonContainer}>
         <Text style={styles.buttonText}>Continue</Text>
       </TouchableOpacity>
       <Text style={styles.infoTextConfirmation}>If this is not correct, just change above to update.</Text>
     </View>
   );
+
+  const handlerDatePickerRendering = () => {
+    setShowStartDatePicker(!showStartDatePicker)
+    setShowEndDatePicker(true)
+  }
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -57,7 +62,7 @@ export const SearchHostStepII = ({ navigation, route }: any) => {
       >
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.headerContainer}>
-            <Text style={styles.headerText}>Schedule and Additional Comments</Text>
+            <Text style={styles.headerText}>Schedule</Text>
           </View>
 
           <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
@@ -78,7 +83,7 @@ export const SearchHostStepII = ({ navigation, route }: any) => {
             </View>
           )}
 
-          <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.datePickerButton}>
+          <TouchableOpacity onPress={() => handlerDatePickerRendering()} style={styles.datePickerButton}>
             <Text style={styles.datePickerButtonText}>{endDate ? endDate.toDateString() : 'Select end date'}</Text>
           </TouchableOpacity>
 
@@ -96,18 +101,19 @@ export const SearchHostStepII = ({ navigation, route }: any) => {
             </View>
           )}
 
-          <TextInput
+          {/* <TextInput
             style={styles.textInput}
             placeholder="Enter any additional comments..."
             placeholderTextColor="gray"
             multiline
             value={comments}
             onChangeText={setComments}
-          />
+          /> */}
 
           {!showConfirmation && (
             <>
-              {startDate && endDate && comments ? (
+              {startDate && endDate ? (
+                // renderConfirmation()
                 <TouchableOpacity onPress={() => setShowConfirmation(true)} style={styles.buttonContainer}>
                   <Text style={styles.buttonText}>Review & Confirm</Text>
                 </TouchableOpacity>
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
   },
   datePicker: {
     width: '100%',
-    height: 200,
+    height: 150,
   },
   buttonContainer: {
     marginVertical: 16,

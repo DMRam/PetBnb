@@ -3,7 +3,7 @@ import { StatusBar, View, StyleSheet, ScrollView, SafeAreaView, ImageBackground,
 import RNPickerSelect from 'react-native-picker-select';
 import { Card, Title, Paragraph } from 'react-native-paper';
 
-export const SearchHome = ({ navigation }: any) => {
+export const SearchHostStepI = ({ navigation }: any) => {
   const [petValue, setPetValue] = useState<string | null>(null);
   const [ageValue, setAgeValue] = useState<string | null>(null);
   const [behaviorValue, setBehaviorValue] = useState<string | null>(null);
@@ -34,12 +34,13 @@ export const SearchHome = ({ navigation }: any) => {
 
   const handleConfirmSelection = () => {
     // You can perform further actions or navigation here
+
     console.log('Confirmed Pet Type:', petValue);
     console.log('Confirmed Age:', ageValue);
     console.log('Confirmed Behavior:', behaviorValue);
 
     // Navigate to another screen or perform desired action
-    navigation.navigate('Search Host Step I', {
+    navigation.navigate('Search Host Step II', {
       petType: petValue,
       age: ageValue,
       behavior: behaviorValue,
@@ -98,9 +99,10 @@ export const SearchHome = ({ navigation }: any) => {
           {!showConfirmation &&
             <>
               {petValue && ageValue && behaviorValue ? (
-                <TouchableOpacity onPress={() => setShowConfirmation(true)} style={styles.buttonContainer}>
-                  <Text style={styles.buttonText}>Review & Confirm</Text>
-                </TouchableOpacity>
+                renderConfirmation()
+                // <TouchableOpacity onPress={() => setShowConfirmation(true)} style={styles.buttonContainer}>
+                //   <Text style={styles.buttonText}>Review & Confirm</Text>
+                // </TouchableOpacity>
               ) : (
                 <Text style={styles.infoText}>Please select all options to proceed.</Text>
               )}
@@ -108,7 +110,7 @@ export const SearchHome = ({ navigation }: any) => {
           }
 
 
-          {showConfirmation && renderConfirmation()}
+          {/* {showConfirmation && renderConfirmation()} */}
 
         </ScrollView>
       </ImageBackground>

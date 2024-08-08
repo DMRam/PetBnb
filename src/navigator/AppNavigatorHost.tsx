@@ -2,21 +2,20 @@ import React from 'react';
 import { CommonActions } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { DashboardScreenHost } from '../screens/dashboard/DashboardScreenHost';
+import { DashboardScreenHost } from '../screens/host/dashboard/DashboardScreenHost';
 import { TestScreen } from '../screens/test/TestScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, TouchableOpacity } from 'react-native';
 import { useLogged } from '../hooks/logged_state/useLogged';
-import { LogoutButton } from '../components/buttons/LogoutButton';
 import { CustomDrawerContent } from '../components/drawer/CustomDrawerComponent';
-import { SearchHome } from '../screens/owner/SearchHome';
-import { SearchHostStepI } from '../screens/owner/SearchHostStepI';
-import { SearchHostStepII } from '../screens/owner/SearchHostStepII';
-import { SummaryScreen } from '../screens/owner/SearchHostStepIII';
-import { MapResult } from '../screens/map/MapResult';
-import { Settings } from '../screens/app/Settings';
+import { SearchHostStepI } from '../screens/owner/host_searching/SearchHostStepI';
+import { SearchHostStepII } from '../screens/owner/host_searching/SearchHostStepII';
+import { SummaryScreen } from '../screens/owner/host_searching/SearchHostStepIII';
+import { MapResult } from '../components/map/MapResult';
+import { Settings } from '../screens/host/host_settings/Settings';
 import { useLoggedUserRole } from '../../src/hooks/logged_state/useLoggedUserRole';
-import { SellerScreen } from '../../src/screens/seller/SellerScreen';
+import { SellerScreen } from '../screens/host/my_store/create_products/SellerScreen';
+
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -44,7 +43,7 @@ const DrawerHomeHost = ({ navigation }: any) => {
 
     return (
         <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <CustomDrawerContent {...props} />}>
-            <Drawer.Screen name="Host Home" component={DashboardScreenHost} />
+            <Drawer.Screen name="Host Dashboard" component={DashboardScreenHost} />
             {['Host Profile', 'Seller Profile', 'My Hosted', 'Settings'].map(screen => (
                 <Drawer.Screen
                     key={screen}
@@ -172,13 +171,13 @@ const BottomTabNavigatorHost = () => {
                     tabBarButton: () => null, // Hide this tab
                 }}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Incomes"
                 component={SearchHome}
                 options={{
                     tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="My Products"
                 component={SearchHostStepI}

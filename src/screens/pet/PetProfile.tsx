@@ -1,7 +1,12 @@
 import React from 'react'
+import { SafeAreaView, Text } from 'react-native'
 
 export const PetProfile = () => {
   return (
-    <div>PetProfile</div>
+    <SafeAreaView>
+      <Text>
+        Pet Profile
+      </Text>
+    </SafeAreaView>
   )
 }

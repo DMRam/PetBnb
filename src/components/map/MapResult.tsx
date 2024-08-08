@@ -17,7 +17,7 @@ export const MapResult = () => {
           {
             title: 'Location Access Required',
             message: 'This app needs to access your location',
-            buttonPositive: 'OK', // Adding the missing property
+            buttonPositive: 'OK',
           }
         );
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -39,14 +39,14 @@ export const MapResult = () => {
           setInitialRegion({
             latitude,
             longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: 0.005, // More accurate zoom level
+            longitudeDelta: 0.005, // More accurate zoom level
           });
         },
         (error) => {
           console.log(error.code, error.message);
         },
-        { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 } // maximumAge set to 0 to avoid using cached location
       );
     };
 
@@ -58,7 +58,7 @@ export const MapResult = () => {
       {initialRegion ? (
         <MapView
           style={styles.map}
-          initialRegion={initialRegion}
+          region={initialRegion} // Change initialRegion to region to allow dynamic updates
           showsUserLocation={true}
           showsMyLocationButton={true}
         />

@@ -1,9 +1,10 @@
 import { useRoute } from '@react-navigation/native';
-import React from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, ImageBackground, StatusBar, ScrollView, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, ImageBackground, StatusBar, ScrollView, StyleSheet, TextInput } from 'react-native';
 
 export const SummaryScreen = ({ navigation, route }: any) => {
   const params = route.params;
+  const [comments, setComments] = useState<string>('');
 
   const calculateDaysBetweenDates = (startDate: Date, endDate: Date): number => {
     // Calculate the difference in milliseconds
@@ -45,8 +46,17 @@ export const SummaryScreen = ({ navigation, route }: any) => {
             <Text style={styles.summaryText}>Start Date: {new Date(params.startDate).toDateString()}</Text>
             <Text style={styles.summaryText}>End Date: {new Date(params.endDate).toDateString()}</Text>
             <Text style={styles.summaryText}>Total days: {totalDays}</Text>
-            <Text style={styles.summaryText}>Comments: {params.comments}</Text>
+            {/* <Text style={styles.summaryText}>Comments: {params.comments}</Text> */}
           </View>
+
+          <TextInput
+            style={styles.textInput}
+            placeholder="Enter any additional comments..."
+            placeholderTextColor="gray"
+            multiline
+            value={comments}
+            onChangeText={setComments}
+          />
 
           <TouchableOpacity onPress={handleSearch} style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Search</Text>
@@ -104,5 +114,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  textInput: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    width: '100%',
+    marginBottom: 16,
   },
 });

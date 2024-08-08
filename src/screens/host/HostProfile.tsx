@@ -1,11 +1,11 @@
 import React from 'react'
 import { SafeAreaView, Text } from 'react-native'
 
-export const HostHome = () => {
+export const HostProfile = () => {
     return (
         <SafeAreaView>
             <Text>
-                Host Home
+                Host Profile
             </Text>
         </SafeAreaView>
     )
