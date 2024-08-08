@@ -1,22 +1,21 @@
 import React from 'react';
-import { CommonActions } from '@react-navigation/native';
+import { CommonActions, NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { DashboardScreenOwner } from '../screens/dashboard/DashboardScreenOwner';
+import { DashboardScreenOwner } from '../screens/owner/dashboard/DashboardScreenOwner';
 import { TestScreen } from '../screens/test/TestScreen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, TouchableOpacity } from 'react-native';
 import { useLogged } from '../hooks/logged_state/useLogged';
-import { LogoutButton } from '../components/buttons/LogoutButton';
 import { CustomDrawerContent } from '../components/drawer/CustomDrawerComponent';
-import { SearchHome } from '../screens/owner/SearchHome';
-import { SearchHostStepI } from '../screens/owner/SearchHostStepI';
-import { SearchHostStepII } from '../screens/owner/SearchHostStepII';
-import { SummaryScreen } from '../screens/owner/SearchHostStepIII';
-import { MapResult } from '../screens/map/MapResult';
-import { Settings } from '../screens/app/Settings';
-import { HostHome } from '../screens/host/HostHome';
+import { SearchHostStepI } from '../screens/owner/host_searching/SearchHostStepI';
+import { SearchHostStepII } from '../screens/owner/host_searching/SearchHostStepII';
+import { SummaryScreen } from '../screens/owner/host_searching/SearchHostStepIII';
+import { MapResult } from '../components/map/MapResult';
+import { Settings } from '../screens/owner/owner_settings/Settings';
 import { useLoggedUserRole } from '../../src/hooks/logged_state/useLoggedUserRole';
+import { OwnerProfile } from '../../src/screens/owner/OwnerProfile';
+import { PetProfile } from '../../src/screens/pet/PetProfile';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -27,14 +26,30 @@ const DrawerHomeOwner = ({ navigation }: any) => {
         onLoggedInOut();
     };
 
+    // This is handling the Screens to display base 
+    // on the elements clicked and its names
+    const getScreenComponent = (screenName: string) => {
+        switch (screenName) {
+            case 'Owner Profile':
+                return OwnerProfile;
+            case 'Pet Profile':
+                return PetProfile
+            case 'My Hosted':
+            case 'Settings':
+                return TestScreen; // Replace with the actual components for these screens
+            default:
+                return TestScreen; // Default component if none match
+        }
+    };
+
     return (
         <Drawer.Navigator initialRouteName="Owner Home" drawerContent={(props) => <CustomDrawerContent {...props} />}>
             <Drawer.Screen name="Owner Home" component={DashboardScreenOwner} />
-            {['Pet Profile', 'Owner Profile', 'Host Profile', 'Seller Profile', 'Settings'].map(screen => (
+            {['Pet Profile', 'Owner Profile', 'Settings'].map(screen => (
                 <Drawer.Screen
                     key={screen}
                     name={screen}
-                    component={TestScreen}
+                    component={getScreenComponent(screen)}
                     options={{
                         headerLeft: () => (
                             <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -94,7 +109,7 @@ const BottomTabNavigatorOwner = () => {
                                 </View>
                             </TouchableOpacity>
                         );
-                    } else if (['SettingsTab', 'ProfileTab', 'Search Host Step I', 'Host Home', 'Map Results'].includes(route.name)) {
+                    } else if (['SettingsTab', 'ProfileTab', 'Search Host Step I', 'Host Profile', 'Map Results'].includes(route.name)) {
                         return (
                             <TouchableOpacity onPress={() => navigation.dispatch(
                                 CommonActions.reset({
@@ -132,7 +147,7 @@ const BottomTabNavigatorOwner = () => {
             {/* Additionally i will need an Vet login/Session/Role */}
             <Tab.Screen
                 name="Owner Home"
-                component={HostHome}
+                component={DashboardScreenOwner}
                 options={{
                     tabBarLabel: 'Switch to Host',
                 }
@@ -152,19 +167,12 @@ const BottomTabNavigatorOwner = () => {
                 }}
             />
             {/* <Tab.Screen
-                name="MyTestTab"
-                component={DashboardScreenTest}
-                options={{
-                    tabBarButton: () => null, // Hide this tab
-                }}
-            /> */}
-            <Tab.Screen
                 name="SearchHome"
                 component={SearchHome}
                 options={{
                     tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
-            />
+            /> */}
             <Tab.Screen
                 name="Search Host Step I"
                 component={SearchHostStepI}
@@ -193,6 +201,13 @@ const BottomTabNavigatorOwner = () => {
                     tabBarButton: () => null, // Hide this tab but making it accessible 
                 }}
             />
+            <Tab.Screen
+                name="Owner Profile"
+                component={OwnerProfile}
+                options={{
+                    tabBarButton: () => null, // Hide this tab but making it accessible 
+                }}
+            />
         </Tab.Navigator>
     );
 };
@@ -205,6 +220,7 @@ const RootNavigatorOwner = () => {
 
 export const AppNavigatorOwner = () => {
     return (
+
         <RootNavigatorOwner />
     );
 };
